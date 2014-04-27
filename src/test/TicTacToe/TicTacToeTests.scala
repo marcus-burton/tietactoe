@@ -2,9 +2,9 @@ package TicTacToe
 
 import org.scalatest._
 
-class TicTacToeTest extends FlatSpec with Matchers {
+class TicTacToeTests extends FlatSpec with Matchers {
 
-  "Tic Tac Toe" should "start with an empty board" in {
+  "Basic game mechanics" should "start with an empty board" in {
     val emptyBoard = Array.fill(3, 3) {
       ' '
     }
@@ -38,20 +38,25 @@ class TicTacToeTest extends FlatSpec with Matchers {
     ticTacToeGame.board(0)(2) should be('X')
   }
 
-  it should "not let a player take a cell already taken" in {
+  "Game robustness" should "not let a player take a cell already taken" in {
     val ticTacToeGame = TicTacToeGame().takeTurn(0, 0).takeTurn(0, 0)
     ticTacToeGame.currentTurn should be('O')
   }
 
+  it should "not let a player take a turn outside of the 3 by 3 grid" in {
+    val emptyBoard = Array.fill(3, 3) {
+      ' '
+    }
+
+    TicTacToeGame().takeTurn(-1, 0).board should be(emptyBoard)
+    TicTacToeGame().takeTurn(0, -1).board should be(emptyBoard)
+    TicTacToeGame().takeTurn(3, 0).board should be(emptyBoard)
+    TicTacToeGame().takeTurn(0, 3).board should be(emptyBoard)
+  }
 }
 
-class TicTacToeRobustnessTest extends FlatSpec with Matchers {
-
-}
-
-
-class ExampleTicTacToeGameTest extends FlatSpec with Matchers {
-  it should "alternate taking turns between X and O with X going first" in {
+class ExampleTicTacToeEndToEndGameTest extends FlatSpec with Matchers {
+  it should "play a full example game" in {
     var ticTacToeGame = TicTacToeGame()
 
     ticTacToeGame.currentTurn should be('X')
