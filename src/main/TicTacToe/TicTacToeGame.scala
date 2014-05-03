@@ -1,12 +1,12 @@
 package TicTacToe
 
-
 case class TicTacToeGame(board: Vector[Vector[Char]] = SpecialBoardStates.Empty,
                          currentTurn: Char = 'X') {
+
   def takeTurn(row: Int, column: Int): TicTacToeGame = {
     if (validTurn(row, column)) {
       val updatedBoard = takeCurrentTurn(row, column)
-      return copy(board = updatedBoard, currentTurn = alternateTurn)
+      return copy(board = updatedBoard, currentTurn = nextTurn)
     }
     this
   }
@@ -20,8 +20,11 @@ case class TicTacToeGame(board: Vector[Vector[Char]] = SpecialBoardStates.Empty,
 
   private def takeCurrentTurn(row: Int, column: Int) = board.updated(row, board(row).updated(column, currentTurn))
 
-  private def alternateTurn = if (currentTurn == 'X') 'O' else 'X'
+  private val nextTurn = if (currentTurn == 'X') 'O' else 'X'
+
+  val winner: Char = ' '
 }
+
 
 object SpecialBoardStates {
   val Empty = Vector.fill(3, 3) {
